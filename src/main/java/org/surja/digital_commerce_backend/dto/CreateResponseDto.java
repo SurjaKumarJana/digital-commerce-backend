@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 
-public class CreateResponseDto {
+public class CreateResponseDTO {
     private Long id;
     private String errorCode;
     private String message;

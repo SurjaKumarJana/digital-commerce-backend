@@ -2,11 +2,10 @@ package org.surja.digital_commerce_backend.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.surja.digital_commerce_backend.entity.Company;
 
 @Getter
 @Setter
-public class SellerDto {
+public class SellerDTO {
     private Long id;
     private String name;
     private String email;

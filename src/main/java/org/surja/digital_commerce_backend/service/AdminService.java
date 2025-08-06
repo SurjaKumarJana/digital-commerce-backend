@@ -7,16 +7,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
-import org.surja.digital_commerce_backend.dto.CreateCompanyReqDto;
-import org.surja.digital_commerce_backend.dto.CreateResponseDto;
-import org.surja.digital_commerce_backend.dto.SellerDto;
+import org.surja.digital_commerce_backend.dto.CreateCompanyReqDTO;
+import org.surja.digital_commerce_backend.dto.CreateResponseDTO;
+import org.surja.digital_commerce_backend.dto.SellerDTO;
 import org.surja.digital_commerce_backend.entity.Company;
 import org.surja.digital_commerce_backend.entity.Role;
 import org.surja.digital_commerce_backend.entity.User;
 import org.surja.digital_commerce_backend.repo.CompanyRepo;
 
 @Service
-public class AdmineService {
+public class AdminService {
 
     @Autowired
     private EntityManager entityManager;
@@ -26,36 +26,36 @@ public class AdmineService {
 
 
     @Transactional
-    public CreateResponseDto createCompany(CreateCompanyReqDto companyReqDto){
+    public CreateResponseDTO createCompany(CreateCompanyReqDTO companyReqDTO){
         Company company = new Company();
-        company.setName(companyReqDto.getName());
+        company.setName(companyReqDTO.getName());
         company.setActive(true);
         // if the entity is simple with few prop. then we can use this
         // , instead of creating repo
         entityManager.persist(company);
 
-        CreateResponseDto responseDto = new CreateResponseDto();
-        responseDto.setId(company.getId());
-        return  responseDto;
+        CreateResponseDTO responseDTO = new CreateResponseDTO();
+        responseDTO.setId(company.getId());
+        return  responseDTO;
     }
 
     @Transactional
-    public CreateResponseDto createSeller(SellerDto sellerDto){
+    public CreateResponseDTO createSeller(SellerDTO sellerDTO){
 
-        Company company = companyRepo.findById(sellerDto.getCompanyId()).get();
+        Company company = companyRepo.findById(sellerDTO.getCompanyId()).get();
         if(company == null){
             throw  new HttpClientErrorException(HttpStatus.BAD_REQUEST,"Company doesn't exits !");
         }
         User seller = new User();
-        seller.setName(sellerDto.getName());
-        seller.setEmail(sellerDto.getEmail());
+        seller.setName(sellerDTO.getName());
+        seller.setEmail(sellerDTO.getEmail());
         seller.setRole(Role.SELLER);
         seller.setCompany(company);
         entityManager.persist(seller);
-        CreateResponseDto responseDto = new CreateResponseDto();
-        responseDto.setId(seller.getId());
+        CreateResponseDTO responseDTO = new CreateResponseDTO();
+        responseDTO.setId(seller.getId());
 
-        return responseDto;
+        return responseDTO;
 
     }
 

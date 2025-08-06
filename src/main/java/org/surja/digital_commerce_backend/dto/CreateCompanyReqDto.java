@@ -6,6 +6,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CreateCompanyReqDto {
+public class CreateCompanyReqDTO {
     private String name;
 }
