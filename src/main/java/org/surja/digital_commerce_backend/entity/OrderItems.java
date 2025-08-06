@@ -1,9 +1,6 @@
 package org.surja.digital_commerce_backend.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,8 +18,10 @@ public class OrderItems {
     private Integer quantity;
     private Double price;
 
+    @ManyToOne
     private Product product;
 
+    @ManyToOne
     private Order order;
 
     private LocalDateTime createdAt;
