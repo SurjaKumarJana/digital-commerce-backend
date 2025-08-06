@@ -78,4 +78,4 @@ src/
 | ------- | ---- |
 | <img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Mail_%28iOS%29.svg" alt="Email" width="20"/> Email |janaofficial0110@gmail.com|
 | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/github/github-original.svg" alt="GitHub" width="20"/> GitHub | [SurjaKumarJana0110](https://github.com/SurjaKumarJana) |
-| <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/linkedin/linkedin-original.svg" alt="LinkedIn" width="20"/> LinkedIn | [Surja Kumar Jana](linkedin.com/in/surjakumarjana) |
+| <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/linkedin/linkedin-original.svg" alt="LinkedIn" width="20"/> LinkedIn | [Surja Kumar Jana](https://linkedin.com/in/surjakumarjana) |
