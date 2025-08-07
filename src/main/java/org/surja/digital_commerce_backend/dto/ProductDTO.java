@@ -1,11 +1,11 @@
 package org.surja.digital_commerce_backend.dto;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
 
-@Setter
-@Getter
+@Data
 public class ProductDTO {
 
     private String name;

@@ -5,14 +5,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.surja.digital_commerce_backend.dto.CreateCompanyReqDTO;
 import org.surja.digital_commerce_backend.dto.CreateResponseDTO;
 import org.surja.digital_commerce_backend.dto.SellerDTO;
 import org.surja.digital_commerce_backend.service.AdminService;
+
+import java.util.List;
 
 
 @RestController
@@ -34,6 +33,13 @@ public class AdminController {
     public ResponseEntity<CreateResponseDTO> createSeller(@RequestBody SellerDTO sellerDTO){
         LOGGER.info("Creating seller");
         return ResponseEntity.ok(adminService.createSeller(sellerDTO));
+    }
+    @GetMapping("/seller")
+    public ResponseEntity<List<SellerDTO>> getAllSellers(){
+
+        LOGGER.info("Getting the seller list ");
+        return ResponseEntity.ok(adminService.getAllSellers());
+
     }
 
 

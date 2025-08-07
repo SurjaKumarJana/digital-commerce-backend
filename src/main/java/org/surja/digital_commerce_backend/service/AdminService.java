@@ -14,6 +14,10 @@ import org.surja.digital_commerce_backend.entity.Company;
 import org.surja.digital_commerce_backend.entity.Role;
 import org.surja.digital_commerce_backend.entity.User;
 import org.surja.digital_commerce_backend.repo.CompanyRepo;
+import org.surja.digital_commerce_backend.repo.UserRepo;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class AdminService {
@@ -23,6 +27,9 @@ public class AdminService {
 
     @Autowired
     private CompanyRepo companyRepo;
+
+    @Autowired
+    private UserRepo userRepo;
 
 
     @Transactional
@@ -59,6 +66,17 @@ public class AdminService {
 
     }
 
+    public List<SellerDTO> getAllSellers(){
+
+        List<User> users = userRepo.findByRole(Role.SELLER);
+        List<SellerDTO> sellers = new ArrayList<>();
+
+        for(User user : users){
+            SellerDTO sellerDTO = SellerDTO.buildDTOFromUser(user);
+            sellers.add(sellerDTO);
+        }
+        return sellers;
+    }
 
 
 }

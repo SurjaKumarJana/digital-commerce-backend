@@ -3,7 +3,6 @@ package org.surja.digital_commerce_backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.surja.digital_commerce_backend.dto.CreateCompanyReqDTO;
 import org.surja.digital_commerce_backend.dto.CreateResponseDTO;
 import org.surja.digital_commerce_backend.dto.ProductDTO;
 import org.surja.digital_commerce_backend.entity.Category;
@@ -41,6 +40,7 @@ public class SellerService {
 
         CreateResponseDTO responseDTO = new CreateResponseDTO();
         responseDTO.setId(product.getId());
+        responseDTO.setMessage("product added succssfully");
 
         return  responseDTO;
 
