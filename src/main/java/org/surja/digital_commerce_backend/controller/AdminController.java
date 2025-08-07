@@ -8,7 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.surja.digital_commerce_backend.dto.CreateCompanyReqDTO;
 import org.surja.digital_commerce_backend.dto.CreateResponseDTO;
+import org.surja.digital_commerce_backend.dto.ResponseDTO;
 import org.surja.digital_commerce_backend.dto.SellerDTO;
+import org.surja.digital_commerce_backend.exception.NotFoundException;
 import org.surja.digital_commerce_backend.service.AdminService;
 
 import java.util.List;
@@ -40,6 +42,12 @@ public class AdminController {
         LOGGER.info("Getting the seller list ");
         return ResponseEntity.ok(adminService.getAllSellers());
 
+    }
+
+    @DeleteMapping("/seller/{id}")
+    private ResponseEntity<ResponseDTO> deleteSeller(@PathVariable Long id) throws NotFoundException {
+        LOGGER.info("deleting seller  Id : "+id);
+        return ResponseEntity.ok(adminService.deleteSeller(id));
     }
 
 

@@ -4,15 +4,18 @@ package org.surja.digital_commerce_backend.service;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
 import org.surja.digital_commerce_backend.dto.CreateCompanyReqDTO;
 import org.surja.digital_commerce_backend.dto.CreateResponseDTO;
+import org.surja.digital_commerce_backend.dto.ResponseDTO;
 import org.surja.digital_commerce_backend.dto.SellerDTO;
 import org.surja.digital_commerce_backend.entity.Company;
 import org.surja.digital_commerce_backend.entity.Role;
 import org.surja.digital_commerce_backend.entity.User;
+import org.surja.digital_commerce_backend.exception.NotFoundException;
 import org.surja.digital_commerce_backend.repo.CompanyRepo;
 import org.surja.digital_commerce_backend.repo.UserRepo;
 
@@ -76,6 +79,21 @@ public class AdminService {
             sellers.add(sellerDTO);
         }
         return sellers;
+    }
+
+    public ResponseDTO deleteSeller(Long id) throws NotFoundException {
+        User user = userRepo.findById(id).orElseThrow(()->new NotFoundException("No seller found with this id"));
+
+        userRepo.deleteById(user.getId());
+
+        ResponseDTO response = ResponseDTO.builder()
+                .id(user.getId())
+                .message("Seller Deleted SuccesFully")
+                .code("123 - Deleted")
+                .build();
+
+        return response;
+
     }
 
 
