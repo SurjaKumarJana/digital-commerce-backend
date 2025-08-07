@@ -39,4 +39,9 @@ public class SellerController {
     public ResponseEntity<ResponseDTO> updateProduct(@PathVariable Long id, @RequestBody ProductDTO productDTO) throws NotFoundException {
         return ResponseEntity.ok(sellerService.updateProduct(id,productDTO));
     }
+    @DeleteMapping("/product/{id}")
+    public ResponseEntity<ResponseDTO> deleteProductById(@PathVariable Long id) throws NotFoundException {
+        LOGGER.info("request to delete product id : "+id);
+        return ResponseEntity.ok(sellerService.deleteProduct(id));
+    }
 }

@@ -86,4 +86,19 @@ public class SellerService {
         return responseDTO;
     }
 
+
+    @Transactional
+    public ResponseDTO deleteProduct(Long id) throws NotFoundException {
+        Product product = productRepo.findById(id).orElseThrow(
+                ()-> new NotFoundException("Product doesn't exists with id : "+id));
+
+        productRepo.deleteById(id);
+        ResponseDTO responseDTO = new ResponseDTO();
+        responseDTO.setId(product.getId());
+        responseDTO.setMessage("Product Deleted");
+        responseDTO.setCode("123-D");
+
+        return responseDTO;
+    }
+
 }
