@@ -58,6 +58,14 @@ public class AdminService {
 
         return ResponseDTO.builder().id(existingComapny.getId()).message("success").code("123-Update").build();
     }
+
+    public ResponseDTO deleteCompany(Long id) throws NotFoundException {
+        Company existingComapny = companyRepo.findById(id).orElseThrow(
+                ()->new NotFoundException("Company Doesn't exist with id : "+id));
+        companyRepo.deleteById(existingComapny.getId());
+
+        return ResponseDTO.builder().id(existingComapny.getId()).message("success").code("123-Deleted").build();
+    }
     @Transactional
     public CreateResponseDTO createSeller(SellerDTO sellerDTO){
 

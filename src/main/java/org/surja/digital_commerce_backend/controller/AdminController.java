@@ -36,6 +36,11 @@ public class AdminController {
         LOGGER.info("updating comapany having Id : "+ id);
         return ResponseEntity.ok(adminService.updateCompany(id,companyReqDto)) ;
     }
+    @DeleteMapping("/company/{id}")
+    public ResponseEntity<ResponseDTO> deleteCompany(@PathVariable Long id) throws NotFoundException {
+        LOGGER.info("deleting comapany having Id : "+ id);
+        return ResponseEntity.ok(adminService.deleteCompany(id)) ;
+    }
 
 
 
