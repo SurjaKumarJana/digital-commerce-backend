@@ -1,13 +1,17 @@
 package org.surja.digital_commerce_backend.dto;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.stereotype.Service;
+import org.surja.digital_commerce_backend.entity.Product;
 
-@Data
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductDTO {
 
+    private Long id;
     private String name;
     private String description;
 
@@ -18,4 +22,23 @@ public class ProductDTO {
 
     private Long companyId;
     private Long categoryId;
+
+
+
+    public static  ProductDTO buildProductDTOFromProduct(Product product){
+        ProductDTO productDTO = ProductDTO.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .description(product.getDescription())
+                .price(product.getPrice())
+                .stocks(product.getStocks())
+                .imageUrl(product.getImageUrl())
+                .companyId(product.getCompany().getId())
+                .categoryId(product.getCategory().getId())
+                .build();
+        return productDTO;
+
+    }
+
+
 }

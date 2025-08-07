@@ -3,6 +3,7 @@ package org.surja.digital_commerce_backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.surja.digital_commerce_backend.dto.CreateResponseDTO;
 import org.surja.digital_commerce_backend.dto.ProductDTO;
 import org.surja.digital_commerce_backend.entity.Category;
@@ -11,6 +12,9 @@ import org.surja.digital_commerce_backend.entity.Product;
 import org.surja.digital_commerce_backend.repo.CategoryRepo;
 import org.surja.digital_commerce_backend.repo.CompanyRepo;
 import org.surja.digital_commerce_backend.repo.ProductRepo;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class SellerService {
@@ -21,6 +25,7 @@ public class SellerService {
     @Autowired
     private ProductRepo productRepo;
 
+    @Transactional
     public CreateResponseDTO createProduct(ProductDTO productDTO){
         Product product = new Product();
         product.setName(productDTO.getName());
@@ -43,9 +48,16 @@ public class SellerService {
         responseDTO.setMessage("product added succssfully");
 
         return  responseDTO;
+    }
 
-
-
+    public List<ProductDTO> getAllProduct(){
+        List<Product> productList = productRepo.findAll();
+        List<ProductDTO> result = new ArrayList<>();
+        for(Product product : productList){
+            ProductDTO productDTO = ProductDTO.buildProductDTOFromProduct(product);
+            result.add(productDTO);
+        }
+        return result;
     }
 
 }
