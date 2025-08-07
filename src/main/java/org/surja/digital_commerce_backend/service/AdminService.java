@@ -50,6 +50,15 @@ public class AdminService {
     }
 
     @Transactional
+    public ResponseDTO updateCompany(Long id, CreateCompanyReqDTO companyReqDto) throws NotFoundException {
+        Company existingComapny = companyRepo.findById(id).orElseThrow(
+                ()->new NotFoundException("Company Doesn't exist with id : "+id));
+        existingComapny.setName(companyReqDto.getName());
+        companyRepo.save(existingComapny);
+
+        return ResponseDTO.builder().id(existingComapny.getId()).message("success").code("123-Update").build();
+    }
+    @Transactional
     public CreateResponseDTO createSeller(SellerDTO sellerDTO){
 
         Company company = companyRepo.findById(sellerDTO.getCompanyId()).get();

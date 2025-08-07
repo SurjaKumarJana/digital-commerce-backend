@@ -31,6 +31,16 @@ public class AdminController {
 
         return ResponseEntity.ok(adminService.createCompany(companyReqDto)) ;
     }
+    @PutMapping("/company/{id}")
+    public ResponseEntity<ResponseDTO> updateCompany(@PathVariable Long id, @RequestBody CreateCompanyReqDTO companyReqDto) throws NotFoundException {
+        LOGGER.info("updating comapany having Id : "+ id);
+        return ResponseEntity.ok(adminService.updateCompany(id,companyReqDto)) ;
+    }
+
+
+
+
+
     @PostMapping("/seller")
     public ResponseEntity<CreateResponseDTO> createSeller(@RequestBody SellerDTO sellerDTO){
         LOGGER.info("Creating seller");
@@ -49,6 +59,7 @@ public class AdminController {
         LOGGER.info("deleting seller  Id : "+id);
         return ResponseEntity.ok(adminService.deleteSeller(id));
     }
+
 
 
 }

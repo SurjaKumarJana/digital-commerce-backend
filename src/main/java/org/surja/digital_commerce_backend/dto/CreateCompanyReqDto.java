@@ -1,11 +1,12 @@
 package org.surja.digital_commerce_backend.dto;
 
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CreateCompanyReqDTO {
     private String name;
 }
