@@ -66,6 +66,7 @@ public class AdminService {
 
         return ResponseDTO.builder().id(existingComapny.getId()).message("success").code("123-Deleted").build();
     }
+
     @Transactional
     public CreateResponseDTO createSeller(SellerDTO sellerDTO){
 
@@ -96,6 +97,20 @@ public class AdminService {
             sellers.add(sellerDTO);
         }
         return sellers;
+    }
+
+    @Transactional
+    public ResponseDTO updateSeller(Long id, SellerDTO sellerDTO) throws NotFoundException {
+        User existingSeller = userRepo.findById(id).orElseThrow(
+                ()->new NotFoundException("Company Doesn't exist with id : "+id));
+
+        existingSeller.setName(sellerDTO.getName());
+        existingSeller.setEmail(sellerDTO.getEmail());
+        existingSeller.setCompany(companyRepo.findById(existingSeller.getCompany().getId()).get());
+
+        //userRepo.save(existingSeller);
+
+        return ResponseDTO.builder().id(existingSeller.getId()).message("success").code("123-Update").build();
     }
 
     public ResponseDTO deleteSeller(Long id) throws NotFoundException {

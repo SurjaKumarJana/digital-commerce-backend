@@ -31,11 +31,13 @@ public class AdminController {
 
         return ResponseEntity.ok(adminService.createCompany(companyReqDto)) ;
     }
+
     @PutMapping("/company/{id}")
     public ResponseEntity<ResponseDTO> updateCompany(@PathVariable Long id, @RequestBody CreateCompanyReqDTO companyReqDto) throws NotFoundException {
         LOGGER.info("updating comapany having Id : "+ id);
         return ResponseEntity.ok(adminService.updateCompany(id,companyReqDto)) ;
     }
+
     @DeleteMapping("/company/{id}")
     public ResponseEntity<ResponseDTO> deleteCompany(@PathVariable Long id) throws NotFoundException {
         LOGGER.info("deleting comapany having Id : "+ id);
@@ -51,6 +53,7 @@ public class AdminController {
         LOGGER.info("Creating seller");
         return ResponseEntity.ok(adminService.createSeller(sellerDTO));
     }
+
     @GetMapping("/seller")
     public ResponseEntity<List<SellerDTO>> getAllSellers(){
 
@@ -59,12 +62,15 @@ public class AdminController {
 
     }
 
+    @PutMapping("/seller/{id}")
+    public ResponseEntity<ResponseDTO> updateSeller(@PathVariable Long id, @RequestBody SellerDTO sellerDTO) throws NotFoundException {
+        LOGGER.info("updating Seller having Id : " + id);
+        return ResponseEntity.ok(adminService.updateSeller(id, sellerDTO));
+    }
+
     @DeleteMapping("/seller/{id}")
-    private ResponseEntity<ResponseDTO> deleteSeller(@PathVariable Long id) throws NotFoundException {
+    public ResponseEntity<ResponseDTO> deleteSeller(@PathVariable Long id) throws NotFoundException {
         LOGGER.info("deleting seller  Id : "+id);
         return ResponseEntity.ok(adminService.deleteSeller(id));
     }
-
-
-
 }
