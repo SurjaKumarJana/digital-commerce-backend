@@ -31,4 +31,11 @@ public class CustomerService {
         return result;
     }
 
+    public ProductDTO getById(Long id) throws NotFoundException {
+        ProductDTO productDTO = ProductDTO.buildProductDTOFromProduct(productRepo
+                .findById(id)
+                .orElseThrow(()-> new NotFoundException("No proudct found with id : "+id)));
+
+        return productDTO;
+    }
 }

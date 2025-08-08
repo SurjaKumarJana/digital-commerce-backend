@@ -27,5 +27,11 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.getProdcutsByKeyword(keyword));
     }
 
+    @GetMapping("/product/{id}")
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) throws NotFoundException {
+        LOGGER.info("request for product having id : "+id);
+        return ResponseEntity.ok(customerService.getById(id));
+    }
+
 
 }
