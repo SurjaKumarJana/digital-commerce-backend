@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.surja.digital_commerce_backend.dto.AddToOrderDto;
+import org.surja.digital_commerce_backend.dto.OrderDetailDto;
 import org.surja.digital_commerce_backend.dto.ProductDTO;
 import org.surja.digital_commerce_backend.exception.NotFoundException;
 import org.surja.digital_commerce_backend.service.CustomerService;
@@ -33,5 +35,11 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.getById(id));
     }
 
+    @PostMapping("/order-item")
+    public ResponseEntity<OrderDetailDto> addToOrder(@RequestBody AddToOrderDto addToOrderDto) throws NotFoundException {
+        LOGGER.info("request for add to order with id : "+addToOrderDto.getUserId());
+        OrderDetailDto orderDetailDto = customerService.addToOrder(addToOrderDto);
+        return ResponseEntity.ok(orderDetailDto);
+    }
 
 }
