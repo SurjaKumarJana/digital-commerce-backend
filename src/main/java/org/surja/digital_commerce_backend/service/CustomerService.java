@@ -3,10 +3,7 @@ package org.surja.digital_commerce_backend.service;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.surja.digital_commerce_backend.dto.AddToOrderDto;
-import org.surja.digital_commerce_backend.dto.OrderDetailDto;
-import org.surja.digital_commerce_backend.dto.OrderItemDto;
-import org.surja.digital_commerce_backend.dto.ProductDTO;
+import org.surja.digital_commerce_backend.dto.*;
 import org.surja.digital_commerce_backend.entity.*;
 import org.surja.digital_commerce_backend.exception.NotFoundException;
 import org.surja.digital_commerce_backend.exception.OutOfStocksException;
@@ -131,5 +128,45 @@ public class CustomerService {
         }
         orderDetailDto.setOrderItems(orderItemDtoList);
         return orderDetailDto;
+    }
+
+
+    @Transactional
+    public ResponseDTO submitOrder(Long id) throws NotFoundException {
+
+        Order order = orderRepo.findById(id)
+                .orElseThrow(()-> new NotFoundException("No order found with id : "+id));
+
+        ResponseDTO response = new ResponseDTO();
+        if (order.getOrderStatus().equals(OrderStatus.DRAFT)) {
+
+            for(OrderItem item : order.getOrderItems()){
+                Product product = productRepo.findById(item.getProduct().getId())
+                        .orElseThrow(()->new NotFoundException("No product found with id : "+id));
+
+                int stocks = product.getStocks() - item.getQuantity();
+                if(stocks>=0){
+                    product.setStocks(stocks);
+                }
+                else {
+                    throw new OutOfStocksException("Out of stock ! Current product Stock : "+product.getStocks() + " for the product : "+product.getId());
+                }
+
+            }
+            order.setOrderStatus(OrderStatus.PLACED);
+            orderRepo.save(order);
+            response.setId(order.getId());
+            response.setMessage("order success fully placed ");
+            response.setCode("1234-S");
+            return response;
+
+        }
+        else {
+            response.setId(order.getId());
+            response.setMessage("faild to place the order , no draft order ");
+            response.setCode("1234-F");
+            return response;
+        }
+
     }
 }

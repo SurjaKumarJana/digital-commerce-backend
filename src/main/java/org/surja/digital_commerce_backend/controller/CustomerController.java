@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.surja.digital_commerce_backend.dto.AddToOrderDto;
 import org.surja.digital_commerce_backend.dto.OrderDetailDto;
 import org.surja.digital_commerce_backend.dto.ProductDTO;
+import org.surja.digital_commerce_backend.dto.ResponseDTO;
 import org.surja.digital_commerce_backend.exception.NotFoundException;
 import org.surja.digital_commerce_backend.service.CustomerService;
 
@@ -40,6 +41,12 @@ public class CustomerController {
         LOGGER.info("request for add to order with id : "+addToOrderDto.getUserId());
         OrderDetailDto orderDetailDto = customerService.addToOrder(addToOrderDto);
         return ResponseEntity.ok(orderDetailDto);
+    }
+
+    @PutMapping("/order/{id}/submit")
+    public ResponseEntity<ResponseDTO> submitOrder(@PathVariable Long id) throws NotFoundException {
+        LOGGER.info("request to submit order having id : "+id);
+        return ResponseEntity.ok(customerService.submitOrder(id));
     }
 
 }
