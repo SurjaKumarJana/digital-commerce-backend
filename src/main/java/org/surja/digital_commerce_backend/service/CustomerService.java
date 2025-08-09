@@ -2,6 +2,7 @@ package org.surja.digital_commerce_backend.service;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.surja.digital_commerce_backend.dto.*;
 import org.surja.digital_commerce_backend.entity.*;
@@ -10,6 +11,7 @@ import org.surja.digital_commerce_backend.exception.OutOfStocksException;
 import org.surja.digital_commerce_backend.repo.OrderRepo;
 import org.surja.digital_commerce_backend.repo.ProductRepo;
 import org.surja.digital_commerce_backend.repo.UserRepo;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +27,8 @@ public class CustomerService {
     @Autowired
     private OrderRepo orderRepo;
 
-    public List<ProductDTO> getProdcutsByKeyword(String keyword) throws NotFoundException {
-        List<Product> productList = productRepo.findByNameContaining(keyword);
+    public List<ProductDTO> getProdcutsByKeyword(String keyword, Pageable pageable) throws NotFoundException {
+        List<Product> productList = productRepo.findByNameContaining(keyword,pageable);
         if (productList.isEmpty()) {
             throw new NotFoundException("No products found for keyword: " + keyword);
         }
