@@ -1,7 +1,11 @@
 package org.surja.digital_commerce_backend.controller;
 
 
+import com.fasterxml.jackson.core.util.BufferRecycler;
 import lombok.Getter;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +19,11 @@ import org.surja.digital_commerce_backend.dto.ResponseDTO;
 import org.surja.digital_commerce_backend.exception.NotFoundException;
 import org.surja.digital_commerce_backend.service.SellerService;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -75,5 +82,45 @@ public class SellerController {
     }
 
 
+    @PostMapping("/product/uploadCSV")
+    public ResponseEntity<List<CreateResponseDTO>> uploadCsv (@RequestParam MultipartFile file) throws IOException {
+        LOGGER.info("File received : {}", file.getOriginalFilename());
+
+        //first we have to read the file
+        BufferedReader fileReader = new BufferedReader(new InputStreamReader(file.getInputStream()));
+        // then we have to parse each row ,so we need a parser
+        CSVParser csvParser = new CSVParser(fileReader, CSVFormat.DEFAULT
+                .withFirstRecordAsHeader()
+                .withIgnoreHeaderCase()
+                .withTrim()
+        );
+        //CSVRecord represent each row in the csv file
+        List<CSVRecord> records = csvParser.getRecords();
+
+        //we need a list of CreateResponseDTO
+        List<CreateResponseDTO> responseDTOS = new ArrayList<>();
+        //now we have to convert this CSVRecord object into productDTO and call the createProduct methods
+        for(CSVRecord record : records){
+            ProductDTO productDTO = new ProductDTO();
+
+            // setting the values of productDTO
+            productDTO.setId(Long.valueOf(record.get("Id")));
+            productDTO.setName(record.get("name"));
+            productDTO.setDescription(record.get("description"));
+            productDTO.setPrice(Double.valueOf(record.get("price")));
+            productDTO.setStocks(Integer.valueOf(record.get("stocks")));
+            productDTO.setImageUrl(record.get("imageUrl"));
+            productDTO.setCompanyId(Long.valueOf(record.get("companyId")));
+            productDTO.setCategoryId(Long.valueOf(record.get("categoryId")));
+
+            //calling sellerService
+            CreateResponseDTO response = sellerService.createProduct(productDTO);
+            //capturing the responses
+            responseDTOS.add(response);
+        }
+
+
+        return  ResponseEntity.ok(responseDTOS);
+    }
 
 }
