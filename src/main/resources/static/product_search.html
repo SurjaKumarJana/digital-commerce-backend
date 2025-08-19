@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Product Search</title>
+    <style>
+        body {
+          font-family: Arial, sans-serif;
+          padding: 20px;
+        }
+        #search-container {
+          margin-bottom: 20px;
+        }
+        #results {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 20px;
+        }
+        .product-card {
+          border: 1px solid #ddd;
+          border-radius: 8px;
+          padding: 10px;
+          width: 250px;
+        }
+        .product-card img {
+          max-width: 100%;
+          height: auto;
+        }
+        .product-name {
+          font-size: 1.1em;
+          font-weight: bold;
+        }
+        .product-description {
+          font-size: 0.9em;
+          margin: 10px 0;
+        }
+        .product-price {
+          color: green;
+          font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<h1>Product Search</h1>
+<div id="search-container">
+    <input type="text" id="keyword" placeholder="Enter product keyword" />
+    <button onclick="searchProducts()">Search</button>
+</div>
+<div id="results"></div>
+
+<script>
+    async function searchProducts() {
+      const keyword = document.getElementById('keyword').value.trim();
+      if (!keyword) {
+        alert("Please enter a keyword.");
+        return;
+      }
+
+      const url = `http://localhost:8080/public/products?keyword=${encodeURIComponent(keyword)}&pageSize=20&pageNo=0`;
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const products = await response.json();
+
+        const resultsDiv = document.getElementById('results');
+        resultsDiv.innerHTML = '';
+
+        if (products.length === 0) {
+          resultsDiv.innerHTML = '<p>No products found.</p>';
+          return;
+        }
+
+        products.forEach(product => {
+          const card = document.createElement('div');
+          card.className = 'product-card';
+
+          card.innerHTML = `
+            <img src="${product.imageUrl}" alt="${product.name}" />
+            <div class="product-name">${product.name}</div>
+            <div class="product-description">${product.description}</div>
+            <div class="product-price">$${product.price}</div>
+          `;
+
+          resultsDiv.appendChild(card);
+        });
+
+      } catch (error) {
+        console.error("Error fetching products:", error);
+        alert("An error occurred while fetching products.");
+      }
+    }
+</script>
+</body>
+</html>
