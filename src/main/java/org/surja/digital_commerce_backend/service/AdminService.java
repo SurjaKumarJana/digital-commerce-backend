@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
@@ -26,6 +27,9 @@ import java.util.List;
 public class AdminService {
 
     @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
     private EntityManager entityManager;
 
     @Autowired
@@ -33,6 +37,8 @@ public class AdminService {
 
     @Autowired
     private UserRepo userRepo;
+
+
 
 
     @Transactional
@@ -59,6 +65,7 @@ public class AdminService {
         return ResponseDTO.builder().id(existingComapny.getId()).message("success").code("123-Update").build();
     }
 
+    @Transactional
     public ResponseDTO deleteCompany(Long id) throws NotFoundException {
         Company existingComapny = companyRepo.findById(id).orElseThrow(
                 ()->new NotFoundException("Company Doesn't exist with id : "+id));
@@ -66,6 +73,8 @@ public class AdminService {
 
         return ResponseDTO.builder().id(existingComapny.getId()).message("success").code("123-Deleted").build();
     }
+
+
 
     @Transactional
     public CreateResponseDTO createSeller(SellerDTO sellerDTO){
@@ -77,13 +86,13 @@ public class AdminService {
         User seller = new User();
         seller.setName(sellerDTO.getName());
         seller.setEmail(sellerDTO.getEmail());
+        seller.setPassword(passwordEncoder.encode(sellerDTO.getPassword()));
         seller.setRole(Role.SELLER);
         seller.setCompany(company);
         entityManager.persist(seller);
-        CreateResponseDTO responseDTO = new CreateResponseDTO();
-        responseDTO.setId(seller.getId());
 
-        return responseDTO;
+
+        return CreateResponseDTO.builder().id(seller.getId()).errorCode("sucess-124").message("seller added").build();
 
     }
 
@@ -106,13 +115,15 @@ public class AdminService {
 
         existingSeller.setName(sellerDTO.getName());
         existingSeller.setEmail(sellerDTO.getEmail());
+        existingSeller.setPassword(passwordEncoder.encode(sellerDTO.getPassword()));
         existingSeller.setCompany(companyRepo.findById(existingSeller.getCompany().getId()).get());
 
-        //userRepo.save(existingSeller);
+
 
         return ResponseDTO.builder().id(existingSeller.getId()).message("success").code("123-Update").build();
     }
 
+    @Transactional
     public ResponseDTO deleteSeller(Long id) throws NotFoundException {
         User user = userRepo.findById(id).orElseThrow(()->new NotFoundException("No seller found with this id"));
 
