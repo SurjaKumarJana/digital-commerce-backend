@@ -3,6 +3,7 @@ package org.surja.digital_commerce_backend.service;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.surja.digital_commerce_backend.dto.*;
 import org.surja.digital_commerce_backend.entity.*;
@@ -57,10 +58,8 @@ public class CustomerService {
                         .getProductId())
                 .orElseThrow(() -> new NotFoundException("No product found with id : " + addToOrderDto.getProductId()));
 
-        // fetching the details of user from db
-        User user = userRepo.findById(addToOrderDto
-                        .getUserId())
-                .orElseThrow(() -> new NotFoundException("No User found with id : " + addToOrderDto.getProductId()));
+        // fetching the details of user session
+        User user = (User) SecurityContextHolder.getContext().getAuthentication();
 
         //getting the list of draft orders specific to the user
         List<Order> orderList = orderRepo.findByOrderStatusAndUser(OrderStatus.DRAFT, user);
