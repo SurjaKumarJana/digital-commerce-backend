@@ -110,7 +110,6 @@ public class SellerController {
             productDTO.setPrice(Double.valueOf(record.get("price")));
             productDTO.setStocks(Integer.valueOf(record.get("stocks")));
             productDTO.setImageUrl(record.get("imageUrl"));
-            productDTO.setCompanyId(Long.valueOf(record.get("companyId")));
             productDTO.setCategoryId(Long.valueOf(record.get("categoryId")));
 
             //calling sellerService

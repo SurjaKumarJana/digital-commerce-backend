@@ -20,7 +20,7 @@ public class ProductDTO {
 
     private String imageUrl;
 
-    private Long companyId;
+
     private Long categoryId;
 
 
@@ -33,7 +33,6 @@ public class ProductDTO {
                 .price(product.getPrice())
                 .stocks(product.getStocks())
                 .imageUrl(product.getImageUrl())
-                .companyId(product.getCompany().getId())
                 .categoryId(product.getCategory().getId())
                 .build();
         return productDTO;
