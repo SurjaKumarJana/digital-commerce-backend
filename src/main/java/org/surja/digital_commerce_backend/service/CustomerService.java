@@ -51,7 +51,7 @@ public class CustomerService {
     }
 
     @Transactional
-    public OrderDetailDto addToOrder(AddToOrderDto addToOrderDto) throws NotFoundException {
+    public OrderDetailDTO addToOrder(AddToOrderDTO addToOrderDto) throws NotFoundException {
 
         // fetching the details of product from db
         Product product = productRepo.findById(addToOrderDto
@@ -119,13 +119,13 @@ public class CustomerService {
         orderRepo.save(existingOrder);
 
         //returning OrderDetailDto
-        OrderDetailDto orderDetailDto = new OrderDetailDto();
+        OrderDetailDTO orderDetailDto = new OrderDetailDTO();
         orderDetailDto.setOrderId(existingOrder.getId());
         orderDetailDto.setOrderTotalPrice(existingOrder.getTotalAmount());
 
-        List<OrderItemDto> orderItemDtoList = new ArrayList<>();
+        List<OrderItemDTO> orderItemDtoList = new ArrayList<>();
         for (OrderItem orderItem1 : existingOrder.getOrderItems()) {
-            orderItemDtoList.add(OrderItemDto.mapOrderItemToDto(orderItem1));
+            orderItemDtoList.add(OrderItemDTO.mapOrderItemToDto(orderItem1));
         }
         orderDetailDto.setOrderItems(orderItemDtoList);
         return orderDetailDto;

@@ -1,18 +1,18 @@
 package org.surja.digital_commerce_backend.controller;
 
 
+import org.hibernate.validator.constraints.ParameterScriptAssert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.surja.digital_commerce_backend.dto.ProductDTO;
+import org.springframework.security.core.parameters.P;
+import org.springframework.web.bind.annotation.*;
+import org.surja.digital_commerce_backend.dto.*;
 import org.surja.digital_commerce_backend.exception.NotFoundException;
 import org.surja.digital_commerce_backend.service.CustomerService;
+import org.surja.digital_commerce_backend.service.PublicService;
 
 import java.util.List;
 
@@ -22,6 +22,8 @@ public class PublicController {
     private static Logger LOGGER = LoggerFactory.getLogger(PublicController.class);
     @Autowired
     private CustomerService customerService;
+    @Autowired
+    private PublicService publicService;
 
     @GetMapping("/products")
     public ResponseEntity<List<ProductDTO>> getProductsByKeywords(@RequestParam String keyword, @RequestParam Integer pageSize, @RequestParam Integer pageNo) throws NotFoundException {
@@ -29,4 +31,23 @@ public class PublicController {
         Pageable pageable = Pageable.ofSize(pageSize).withPage(pageNo);
         return ResponseEntity.ok(customerService.getProdcutsByKeyword(keyword,pageable));
     }
+
+    @PostMapping("/sign-up")
+    public ResponseEntity<SignUpResponseDTO> signUpUser(@RequestBody SignUpDTO signUpDTO) throws NotFoundException {
+        SignUpResponseDTO response = publicService.verifyEmail(signUpDTO);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/verify/{token}")
+    public ResponseEntity<ResponseDTO> creatVerifiedUser(@PathVariable String token, @RequestBody UserDTO userDTO) throws NotFoundException {
+        ResponseDTO response  = publicService.createUser(token , userDTO);
+
+        return ResponseEntity.ok(response);
+    }
+
+
+
+
+
+
 }

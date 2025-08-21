@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.surja.digital_commerce_backend.dto.OrderDetailDto;
 import org.surja.digital_commerce_backend.dto.ResponseDTO;
 import org.surja.digital_commerce_backend.exception.NotFoundException;
 import org.surja.digital_commerce_backend.exception.OutOfStocksException;

@@ -8,7 +8,7 @@ import org.surja.digital_commerce_backend.entity.OrderItem;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderItemDto {
+public class OrderItemDTO {
     private Long id;
     private Integer quantity;
     private Double price;
@@ -16,8 +16,8 @@ public class OrderItemDto {
     private Double totalPrice;
 
 
-    public static OrderItemDto mapOrderItemToDto(OrderItem orderItem){
-        OrderItemDto orderItemDto = OrderItemDto.builder()
+    public static OrderItemDTO mapOrderItemToDto(OrderItem orderItem){
+        OrderItemDTO orderItemDto = OrderItemDTO.builder()
                 .id(orderItem.getId())
                 .price(orderItem.getPrice())
                 .quantity(orderItem.getQuantity())

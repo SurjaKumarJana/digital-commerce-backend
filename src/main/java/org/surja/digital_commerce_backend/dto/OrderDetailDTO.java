@@ -8,11 +8,11 @@ import java.util.List;
 
 @Getter
 @Setter
-public class OrderDetailDto {
+public class OrderDetailDTO {
 
     private Long orderId;
 
-    private List<OrderItemDto> orderItems;
+    private List<OrderItemDTO> orderItems;
 
     private Double orderTotalPrice;
 }

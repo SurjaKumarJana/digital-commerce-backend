@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.surja.digital_commerce_backend.dto.AddToOrderDto;
-import org.surja.digital_commerce_backend.dto.OrderDetailDto;
+import org.surja.digital_commerce_backend.dto.AddToOrderDTO;
+import org.surja.digital_commerce_backend.dto.OrderDetailDTO;
 import org.surja.digital_commerce_backend.dto.ProductDTO;
 import org.surja.digital_commerce_backend.dto.ResponseDTO;
 import org.surja.digital_commerce_backend.exception.NotFoundException;
@@ -40,9 +40,9 @@ public class CustomerController {
     }
 
     @PostMapping("/order-item")
-    public ResponseEntity<OrderDetailDto> addToOrder(@RequestBody AddToOrderDto addToOrderDto) throws NotFoundException {
+    public ResponseEntity<OrderDetailDTO> addToOrder(@RequestBody AddToOrderDTO addToOrderDto) throws NotFoundException {
         LOGGER.info("request for add to order with id : "+addToOrderDto.getUserId());
-        OrderDetailDto orderDetailDto = customerService.addToOrder(addToOrderDto);
+        OrderDetailDTO orderDetailDto = customerService.addToOrder(addToOrderDto);
         return ResponseEntity.ok(orderDetailDto);
     }
 
