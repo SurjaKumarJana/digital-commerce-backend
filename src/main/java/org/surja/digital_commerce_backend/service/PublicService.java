@@ -30,10 +30,12 @@ public class PublicService {
     private PasswordEncoder passwordEncoder;
 
 
+    @Autowired
+    private TokenService tokenService;
 
 
     //method to verify the user email
-    public SignUpResponseDTO verifyEmail(SignUpDTO signUpDTO) throws NotFoundException {
+    public SignUpResponseDTO signUpRequest(SignUpDTO signUpDTO) throws NotFoundException {
         // 1. we have to check if the user exist of not
         User user =userRepo.findByEmail(signUpDTO.getEmail());
         if( user != null){
@@ -42,10 +44,7 @@ public class PublicService {
 
         // 2. we need to verify the email
         // creating token
-        String token = UUID.randomUUID().toString();
-        String key = "Token : "+token;
-        String value = signUpDTO.getEmail();
-        redisTemplate.opsForValue().set(key,value,2, TimeUnit.MINUTES);
+        String token = tokenService.generateToken(signUpDTO.getEmail(),10);
 
         // 3. triggering  a verification link in email
         String link = "http://localhost:8080/public/verify/"+token;
@@ -62,8 +61,8 @@ public class PublicService {
     @Transactional
     public ResponseDTO createUser(String token , UserDTO userDTO) throws NotFoundException {
 
-        String key = "Token : " + token;
-        String value = redisTemplate.opsForValue().get(key);
+        String value = tokenService.validateToken(token);
+
         if (value == null || !value.equals(userDTO.getEmail())) {
             throw new NotFoundException(" Invalid Token");
         }
@@ -77,6 +76,7 @@ public class PublicService {
 
 
         userRepo.save(user);
+        tokenService.invalidateToken(token);
 
         return ResponseDTO.builder()
                 .message("user successfully created")
@@ -86,4 +86,36 @@ public class PublicService {
     }
 
 
+
+// method to update the password (Forgot password)
+    public SignUpResponseDTO requestPasswordReset(SignUpDTO signUpDTO) throws NotFoundException {
+        String email = signUpDTO.getEmail();
+        if (userRepo.findByEmail(email) == null) {
+            throw new NotFoundException("No user found with email " + email);
+        }
+
+        String token = tokenService.generateToken( email, 10);
+        String link = "http://localhost:8080/public/reset-password/" + token;
+
+        return SignUpResponseDTO.builder()
+                .message("reset link sent")
+                .link(link)
+                .build();
+    }
+
+    @Transactional
+    public ResponseDTO resetPassword(String token , UserDTO userDTO) throws NotFoundException {
+        String value = tokenService.validateToken(token);
+        if (value == null || !value.equals(userDTO.getEmail())) {
+            throw new NotFoundException("Invalid token");
+        }
+
+        User user = userRepo.findByEmail(userDTO.getEmail());
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        userRepo.save(user);
+
+        tokenService.invalidateToken(token);
+
+        return ResponseDTO.builder().message("password updated successfully").build();
+    }
 }

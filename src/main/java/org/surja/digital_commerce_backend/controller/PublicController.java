@@ -14,6 +14,7 @@ import org.surja.digital_commerce_backend.exception.NotFoundException;
 import org.surja.digital_commerce_backend.service.CustomerService;
 import org.surja.digital_commerce_backend.service.PublicService;
 
+import java.awt.image.ReplicateScaleFilter;
 import java.util.List;
 
 @RestController
@@ -34,7 +35,7 @@ public class PublicController {
 
     @PostMapping("/sign-up")
     public ResponseEntity<SignUpResponseDTO> signUpUser(@RequestBody SignUpDTO signUpDTO) throws NotFoundException {
-        SignUpResponseDTO response = publicService.verifyEmail(signUpDTO);
+        SignUpResponseDTO response = publicService.signUpRequest(signUpDTO);
         return ResponseEntity.ok(response);
     }
 
@@ -43,6 +44,16 @@ public class PublicController {
         ResponseDTO response  = publicService.createUser(token , userDTO);
 
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/reset-password")
+    public  ResponseEntity<SignUpResponseDTO> requestPasswordReset(@RequestBody SignUpDTO signUpDTO) throws NotFoundException {
+        SignUpResponseDTO response = publicService.requestPasswordReset(signUpDTO);
+        return ResponseEntity.ok(response);
+    }
+    @PostMapping("/reset-password/{token}")
+    public ResponseEntity<ResponseDTO> resetPassword(@PathVariable String token, @RequestBody UserDTO userDTO) throws NotFoundException {
+        return ResponseEntity.ok(publicService.resetPassword(token,userDTO));
     }
 
 
